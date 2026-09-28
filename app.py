@@ -106,15 +106,51 @@ def normal_dashboard():
     
     user_lat = request.args.get('lat', type=float)
     user_lng = request.args.get('lng', type=float)
+    # Optional search/filter parameters from Sankalpa
+    pooja = request.args.get('pooja')
+    veda = request.args.get('veda')
+    sutra = request.args.get('sutra')
+    gotra = request.args.get('gotra')
     
     priests = User.query.filter_by(role='priest').all()
-    
+
+    # If a pooja filter is provided, filter priests who offer that ritual.
+    def priest_offers(p, pooja_name):
+        if not p.functions_rituals:
+            return False
+        try:
+            # try JSON-like content
+            import json
+            raw = p.functions_rituals
+            data = json.loads(raw) if isinstance(raw, str) else raw
+            # data may be list of objects with name/amount or simple list
+            if isinstance(data, list):
+                for item in data:
+                    if isinstance(item, dict) and 'name' in item and item['name'].strip().lower() == pooja_name.strip().lower():
+                        return True
+                    if isinstance(item, str) and item.strip().lower() == pooja_name.strip().lower():
+                        return True
+        except Exception:
+            # fallback: substring match in plain text
+            try:
+                return pooja_name.strip().lower() in (p.functions_rituals or '').lower()
+            except Exception:
+                return False
+        return False
+
+    if pooja:
+        priests = [p for p in priests if priest_offers(p, pooja)]
+
+    # If location provided, compute distance and sort
     if user_lat is not None and user_lng is not None:
         for p in priests:
             p.distance = calculate_distance(user_lat, user_lng, p.latitude, p.longitude)
         priests.sort(key=lambda x: x.distance)
-    
-    return render_template('normal_dashboard.html', priests=priests, user_lat=user_lat, user_lng=user_lng)
+
+    # Only show priest cards when a pooja search was performed (per new UX requirement)
+    show_priests = bool(pooja)
+
+    return render_template('normal_dashboard.html', priests=priests, user_lat=user_lat, user_lng=user_lng, show_priests=show_priests, search_pooja=pooja or '', search_veda=veda or '', search_sutra=sutra or '', search_gotra=gotra or '')
 
 @app.route('/book_priest/<int:priest_id>', methods=['POST'])
 @login_required

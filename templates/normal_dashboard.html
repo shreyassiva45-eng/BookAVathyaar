@@ -55,6 +55,7 @@
 {% endif %}
 
 <div class="dashboard-grid">
+    {% if show_priests %}
     {% for priest in priests %}
     <div class="card priest-card fade-in" style="animation-delay: {{ loop.index0 * 0.1 }}s">
         <div class="priest-header">
@@ -123,12 +124,15 @@
             Connect Now
         </button>
     </div>
-    {% else %}
-    <div class="card glass" style="grid-column: 1/-1; text-align: center; padding: 4rem;">
-        <p style="color: var(--text-muted); font-size: 1.2rem;">No priests available in your area yet.</p>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Try clearing your location filter or check back later.</p>
-    </div>
     {% endfor %}
+    {% else %}
+    <div class="card glass" style="grid-column: 1/-1; text-align: center; padding: 2rem;">
+        <p style="color: var(--text-muted); font-size: 1.05rem;">Select a Pooja above and press OK to find matching priests.</p>
+        {% if search_pooja %}
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">No priests found offering "{{ search_pooja }}".</p>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 
 <!-- Booking Modal Step 1: Details -->
@@ -404,13 +408,18 @@
         const sutra = sheet.querySelector('#sankalpa-sutra').value;
         const gotra = sheet.querySelector('#sankalpa-gotra').value.trim();
         const name = sheet.querySelector('#sankalpa-name').value.trim();
-        if (!veda || !sutra || !gotra || !name) {
-            alert('Please fill all required fields');
+        if (!veda || !sutra || !gotra) {
+            alert('Please fill all required fields (name is optional for search).');
             return;
         }
-        // Close and navigate to priest list - for now just close and show a mock alert
-        closeSankalpa();
-        alert('Sankalpa saved. Navigate to Priest Selection with:\n' + JSON.stringify({pooja: sheet.dataset.pooja, veda, sutra, gotra, name}, null, 2));
+        // Close and navigate to server-side dashboard with query params to show priests
+        const params = new URLSearchParams();
+        params.set('pooja', sheet.dataset.pooja);
+        params.set('veda', veda);
+        params.set('sutra', sutra);
+        params.set('gotra', gotra);
+        // navigate to dashboard with search params
+        window.location.href = '{{ url_for('normal_dashboard') }}' + '?' + params.toString();
     }
 
     function selectPayment(type) {

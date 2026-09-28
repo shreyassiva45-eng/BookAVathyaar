@@ -213,6 +213,12 @@
             noBtn.classList.remove('btn-primary');
             document.getElementById('brahmin-yes-fields').style.display = 'block';
             document.getElementById('brahmin-no-fields').style.display = 'none';
+            // Only enforce required when user is signing up as a priest
+            if (document.getElementById('form-action').value === 'signup' && document.getElementById('form-role').value === 'priest') {
+                document.querySelector('input[name="gotra_brahmin"]').setAttribute('required','true');
+                document.querySelector('input[name="sutra"]').setAttribute('required','true');
+                document.querySelector('select[name="veda"]').setAttribute('required','true');
+            }
         } else {
             noBtn.classList.add('btn-primary');
             noBtn.classList.remove('btn-outline');
@@ -220,6 +226,10 @@
             yesBtn.classList.remove('btn-primary');
             document.getElementById('brahmin-no-fields').style.display = 'block';
             document.getElementById('brahmin-yes-fields').style.display = 'none';
+            // Remove required attributes for non-brahmin or login flow
+            document.querySelector('input[name="gotra_brahmin"]').removeAttribute('required');
+            document.querySelector('input[name="sutra"]').removeAttribute('required');
+            document.querySelector('select[name="veda"]').removeAttribute('required');
         }
     }
 
@@ -229,10 +239,18 @@
         document.getElementById('form-action').value = 'login';
         document.getElementById('form-title').innerText = 'Welcome Back';
         
+        // Show social auth and also surface brahmin-related inputs so priests can provide Gotra/Sutra/Veda on login if desired.
         document.getElementById('social-auth').style.display = 'block';
-        document.getElementById('signup-fields').style.display = 'none';
-        document.getElementById('normal-brahmin-check').style.display = 'none';
-        document.getElementById('extended-fields').style.display = 'none';
+        document.getElementById('signup-fields').style.display = 'block';
+        document.getElementById('normal-brahmin-check').style.display = 'block';
+        document.getElementById('extended-fields').style.display = 'block';
+        // For login, these fields should not be required; remove attributes if present.
+        const gb = document.querySelector('input[name="gotra_brahmin"]');
+        const st = document.querySelector('input[name="sutra"]');
+        const vd = document.querySelector('select[name="veda"]');
+        if (gb) gb.removeAttribute('required');
+        if (st) st.removeAttribute('required');
+        if (vd) vd.removeAttribute('required');
         document.getElementById('submit-btn').innerText = 'Login';
         document.getElementById('submit-btn').disabled = false;
     }

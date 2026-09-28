@@ -160,6 +160,32 @@
                 <label>Full Address</label>
                 <textarea name="address" class="form-control" rows="2" placeholder="Where should the priest arrive?" required></textarea>
             </div>
+            <div class="grid-2" style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem;">
+                <div class="form-group">
+                    <label>Gotra</label>
+                    <input type="text" name="sankalpa_gotra" id="booking-gotra" class="form-control" placeholder="Gotra (optional)">
+                </div>
+                <div class="form-group">
+                    <label>Sutra</label>
+                    <input type="text" name="sankalpa_sutra" id="booking-sutra" class="form-control" placeholder="Sutra (optional)">
+                </div>
+            </div>
+            <div class="grid-2" style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem;">
+                <div class="form-group">
+                    <label>Veda</label>
+                    <select name="sankalpa_veda" id="booking-veda" class="form-control">
+                        <option value="">Select Veda (optional)</option>
+                        <option>Rig</option>
+                        <option>Yajur</option>
+                        <option>Sama</option>
+                        <option>Atharvana</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Sharmaanamam (Name)</label>
+                    <input type="text" name="sankalpa_name" id="booking-name" class="form-control" placeholder="Your name (optional)">
+                </div>
+            </div>
             
             <div class="glass" style="margin: 2rem 0; padding: 1.5rem; background: rgba(255,153,51,0.05); text-align: center;">
                 <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem;">Estimated Fee</div>

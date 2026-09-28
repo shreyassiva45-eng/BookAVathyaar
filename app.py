@@ -177,6 +177,11 @@ def book_priest(priest_id):
     ritual = request.form.get('ritual')
     address = request.form.get('address')
     amount = float(request.form.get('amount', '1000')) # Mock amount
+    # Sankalpa details from booking form
+    sankalpa_gotra = request.form.get('sankalpa_gotra')
+    sankalpa_sutra = request.form.get('sankalpa_sutra')
+    sankalpa_veda = request.form.get('sankalpa_veda')
+    sankalpa_name = request.form.get('sankalpa_name')
     
     # Validate date is not in the past
     try:
@@ -201,6 +206,10 @@ def book_priest(priest_id):
         location_address=address,
         ritual=ritual,
         amount=amount,
+        sankalpa_gotra=sankalpa_gotra,
+        sankalpa_sutra=sankalpa_sutra,
+        sankalpa_veda=sankalpa_veda,
+        sankalpa_name=sankalpa_name,
         status='awaiting'
     )
     db.session.add(booking)

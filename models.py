@@ -38,6 +38,11 @@ class Booking(db.Model):
     is_finished = db.Column(db.Boolean, default=False)
     rating = db.Column(db.Integer, nullable=True) # 1-5 Optional
     review_comment = db.Column(db.Text, nullable=True)
+    # Sankalpa info provided by the normal user at booking time
+    sankalpa_gotra = db.Column(db.String(50), nullable=True)
+    sankalpa_sutra = db.Column(db.String(50), nullable=True)
+    sankalpa_veda = db.Column(db.String(50), nullable=True)
+    sankalpa_name = db.Column(db.String(100), nullable=True)
     
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 

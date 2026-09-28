@@ -15,6 +15,39 @@
     </div>
 </div>
 
+<!-- Poojas Accordion -->
+<style>
+    .pooja-header { background: #8B0000; color: white; padding: 12px 16px; border-radius: 8px; cursor: pointer; display:flex; align-items:center; justify-content:space-between; margin-top: 1rem; }
+    .pooja-list { margin-top: 10px; display: none; max-height: 320px; overflow: auto; }
+    .pooja-item { background: #f0f0f0; color: #8B0000; padding: 12px; border-radius: 10px; margin-bottom: 8px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
+    .bottom-sheet { position: fixed; left:0; right:0; bottom:-100%; background: white; border-top-left-radius:16px; border-top-right-radius:16px; transition: bottom 300ms ease; max-height: 80vh; overflow:auto; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); }
+    .bottom-sheet.active { bottom:0; }
+    .overlay { position:fixed; left:0; right:0; top:0; bottom:0; background: rgba(0,0,0,0.4); display:none; }
+    .overlay.active { display:block; }
+    .pooja-list::-webkit-scrollbar { height:8px; }
+</style>
+
+<div style="margin-top:1rem;">
+    <div class="pooja-header" onclick="togglePoojaAccordion()">
+        <div style="font-weight:700;">Poojas</div>
+        <div id="pooja-toggle-icon">▸</div>
+    </div>
+    <div id="pooja-list" class="pooja-list">
+        <!-- exact Pooja list -->
+        {% set poojas = [
+            'Ayudha Pooja','Ayyappa Swamy Pooja','Bhagavathi Seva','Bhoomi Pooja','Chandi Parayanam (Saptashati)',
+            'Ganapathi Pooja','Krishna Jayanthi Pooja (Janmashtami)','Lakshmi Pooja','Lalitha Sahasranama Pooja','New Business/Office Opening Pooja',
+            'New Vehicle Pooja','Punyaha Vachanam','Rudrabhishekam','Samaradhanai Pooja','Saraswathi Pooja','Sathyanarayana Swamy Pooja',
+            'Srimad Bhagavatam Parayanam','Sumangali Pooja','Vara Lakshmi Pooja','Vasakal Pooja (Nilai Vasal Pooja)','Veda Parayanam' ] %}
+        {% for p in poojas %}
+        <div class="pooja-item" onclick="openSankalpaSheet('{{ p|e }}')">
+            <div>{{ p }}</div>
+            <div style="color:#8B0000;">›</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
 {% if user_lat and user_lng %}
 <div class="alert success fade-in">
     <span>✨ Showing the best matches near your current location.</span>
@@ -135,6 +168,37 @@
             </button>
             <button type="submit" id="actual-submit-btn" style="display: none;"></button>
         </form>
+    </div>
+</div>
+
+<!-- Sankalpa Bottom Sheet (client-side modal) -->
+<div id="sankalpa-overlay" class="overlay"></div>
+<div id="sankalpa-sheet" class="bottom-sheet">
+    <div style="padding: 16px;">
+        <div style="width:48px; height:4px; background:#eee; border-radius:2px; margin:0 auto 12px;"></div>
+        <h3 id="sheet-title" style="color:#8B0000; margin:0 0 6px;">Enter Sankalpa Details</h3>
+        <div id="sheet-subtitle" style="color: #777; margin-bottom: 12px;"></div>
+
+        <div style="display:grid; gap:10px;">
+            <select id="sankalpa-veda" class="form-control" style="padding:10px; border-radius:8px; border:1px solid #ddd;">
+                <option value="">Select Veda</option>
+                <option>Rig</option>
+                <option>Yajur</option>
+                <option>Sama</option>
+                <option>Atharvana</option>
+            </select>
+            <select id="sankalpa-sutra" class="form-control" style="padding:10px; border-radius:8px; border:1px solid #ddd;">
+                <option value="">Select Sutra</option>
+                <option>Apastamba</option>
+                <option>Bodhayana</option>
+                <option>Katyayana</option>
+                <option>Other / Don't Know</option>
+            </select>
+            <input id="sankalpa-gotra" placeholder="Gotra" class="form-control" style="padding:10px; border-radius:8px; border:1px solid #ddd;">
+            <input id="sankalpa-name" placeholder="Sharmaanamam (Your Name)" class="form-control" style="padding:10px; border-radius:8px; border:1px solid #ddd; text-transform: capitalize;">
+            <button class="btn btn-primary" style="background:#8B0000; width:100%; padding:12px; border-radius:8px;" onclick="findPriestsFromSankalpa()">Find Priests</button>
+            <button class="btn btn-ghost" style="width:100%; padding:10px; border-radius:8px;" onclick="closeSankalpa()">Cancel</button>
+        </div>
     </div>
 </div>
 
@@ -299,6 +363,54 @@
 
     function closeRazorpay() {
         document.getElementById('razorpay-modal').classList.remove('active');
+    }
+
+    // Pooja accordion behaviors and Sankalpa bottom sheet
+    function togglePoojaAccordion() {
+        const list = document.getElementById('pooja-list');
+        const icon = document.getElementById('pooja-toggle-icon');
+        if (list.style.display === 'block') {
+            list.style.display = 'none';
+            icon.innerText = '▸';
+        } else {
+            list.style.display = 'block';
+            icon.innerText = '▾';
+        }
+    }
+
+    function openSankalpaSheet(poojaName) {
+        // build sheet content dynamically
+        const sheet = document.getElementById('sankalpa-sheet');
+        const overlay = document.getElementById('sankalpa-overlay');
+        sheet.querySelector('#sheet-title').innerText = 'Enter Sankalpa Details';
+        sheet.querySelector('#sheet-subtitle').innerText = poojaName;
+        sheet.querySelector('#sankalpa-veda').value = '';
+        sheet.querySelector('#sankalpa-sutra').value = '';
+        sheet.querySelector('#sankalpa-gotra').value = '';
+        sheet.querySelector('#sankalpa-name').value = '';
+        sheet.dataset.pooja = poojaName;
+        overlay.classList.add('active');
+        sheet.classList.add('active');
+    }
+
+    function closeSankalpa() {
+        document.getElementById('sankalpa-overlay').classList.remove('active');
+        document.getElementById('sankalpa-sheet').classList.remove('active');
+    }
+
+    function findPriestsFromSankalpa() {
+        const sheet = document.getElementById('sankalpa-sheet');
+        const veda = sheet.querySelector('#sankalpa-veda').value;
+        const sutra = sheet.querySelector('#sankalpa-sutra').value;
+        const gotra = sheet.querySelector('#sankalpa-gotra').value.trim();
+        const name = sheet.querySelector('#sankalpa-name').value.trim();
+        if (!veda || !sutra || !gotra || !name) {
+            alert('Please fill all required fields');
+            return;
+        }
+        // Close and navigate to priest list - for now just close and show a mock alert
+        closeSankalpa();
+        alert('Sankalpa saved. Navigate to Priest Selection with:\n' + JSON.stringify({pooja: sheet.dataset.pooja, veda, sutra, gotra, name}, null, 2));
     }
 
     function selectPayment(type) {

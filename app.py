@@ -14,6 +14,23 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
+# Canonical Pooja names and synonyms map for matching
+POOJA_CANONICAL = [
+    'Ayudha Pooja','Ayyappa Swamy Pooja','Bhagavathi Seva','Bhoomi Pooja','Chandi Parayanam (Saptashati)',
+    'Ganapathi Pooja','Krishna Jayanthi Pooja (Janmashtami)','Lakshmi Pooja','Lalitha Sahasranama Pooja','New Business/Office Opening Pooja',
+    'New Vehicle Pooja','Punyaha Vachanam','Rudrabhishekam','Samaradhanai Pooja','Saraswathi Pooja','Sathyanarayana Swamy Pooja',
+    'Srimad Bhagavatam Parayanam','Sumangali Pooja','Vara Lakshmi Pooja','Vasakal Pooja (Nilai Vasal Pooja)','Veda Parayanam'
+]
+
+# Simple synonyms mapping (lowercased) to include common short forms.
+POOJA_SYNONYMS = {
+    'ayyappa swamy pooja': ['ayyapa pooja','shasta pooja','iyyapa pooja','ayyappa pooja'],
+    'krishna jayanthi pooja (janmashtami)': ['krishna jayanthi','janmashtami','janmashtami pooja'],
+    'new business/office opening pooja': ['new business pooja','office opening pooja','business opening'],
+    'new vehicle pooja': ['vehicle pooja','new vehicle'],
+    'sathyanarayana swamy pooja': ['sathyanarayana pooja','sathyanarayana swamy'],
+}
+
 login_manager = LoginManager()
 login_manager.login_view = 'auth_portal'
 login_manager.init_app(app)

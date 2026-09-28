@@ -173,25 +173,27 @@
         document.getElementById('form-action').value = 'signup';
         document.getElementById('form-role').value = role;
         document.getElementById('form-title').innerText = role === 'priest' ? 'Priest Sign Up' : 'Sign Up to Book';
-        
+
         document.getElementById('signup-fields').style.display = 'block';
-        
+
         if (role === 'normal') {
+            // Normal users should be able to sign up immediately without the brahmin gate.
             document.getElementById('social-auth').style.display = 'block';
             document.getElementById('priest-fields').style.display = 'none';
             document.getElementById('priest-location-group').style.display = 'none';
-            document.getElementById('normal-brahmin-check').style.display = 'block';
-            document.getElementById('extended-fields').style.display = 'none'; // Wait for brahmin check
-            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('normal-brahmin-check').style.display = 'none';
+            document.getElementById('extended-fields').style.display = 'none';
+            document.getElementById('submit-btn').disabled = false;
         } else {
+            // For priest signup, show extended fields and ask brahmin status (required for certain fields).
             document.getElementById('social-auth').style.display = 'none';
             document.getElementById('priest-fields').style.display = 'block';
             document.getElementById('priest-location-group').style.display = 'block';
-            document.getElementById('normal-brahmin-check').style.display = 'none';
+            document.getElementById('normal-brahmin-check').style.display = 'block';
             document.getElementById('extended-fields').style.display = 'block';
             document.getElementById('brahmin-yes-fields').style.display = 'none';
             document.getElementById('brahmin-no-fields').style.display = 'none';
-            document.getElementById('submit-btn').disabled = false;
+            document.getElementById('submit-btn').disabled = true; // will be enabled once brahmin status selected
         }
         document.getElementById('submit-btn').innerText = 'Sign Up';
     }

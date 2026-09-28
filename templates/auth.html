@@ -48,6 +48,34 @@
                         <label>Full Name</label>
                         <input type="text" name="name" class="form-control" placeholder="John Doe">
                     </div>
+                    <div id="signup-sankalpa" style="display: none;">
+                        <div class="grid-2" style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem;">
+                            <div class="form-group">
+                                <label>Gotra</label>
+                                <input type="text" name="gotra_non_brahmin" class="form-control" placeholder="Gotra (optional)">
+                            </div>
+                            <div class="form-group">
+                                <label>Sutra</label>
+                                <input type="text" name="sutra" class="form-control" placeholder="Sutra (optional)">
+                            </div>
+                        </div>
+                        <div class="grid-2" style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem; margin-top:0.5rem;">
+                            <div class="form-group">
+                                <label>Veda</label>
+                                <select name="veda" class="form-control">
+                                    <option value="">Select Veda (optional)</option>
+                                    <option value="Rig Veda">Rig Veda</option>
+                                    <option value="Yajur Veda">Yajur Veda</option>
+                                    <option value="Sama Veda">Sama Veda</option>
+                                    <option value="Atharva Veda">Atharva Veda</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Sharmaanamam (Household Name)</label>
+                                <input type="text" name="sharmaanamam" class="form-control" placeholder="Sharmaanamam (optional)">
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -183,6 +211,9 @@
             document.getElementById('priest-location-group').style.display = 'none';
             document.getElementById('normal-brahmin-check').style.display = 'none';
             document.getElementById('extended-fields').style.display = 'none';
+            // show optional sankalpa fields for normal users
+            const signupSankalpa = document.getElementById('signup-sankalpa');
+            if (signupSankalpa) signupSankalpa.style.display = 'block';
             document.getElementById('submit-btn').disabled = false;
         } else {
             // For priest signup, show extended fields and ask brahmin status (required for certain fields).
@@ -191,6 +222,9 @@
             document.getElementById('priest-location-group').style.display = 'block';
             document.getElementById('normal-brahmin-check').style.display = 'block';
             document.getElementById('extended-fields').style.display = 'block';
+            // hide optional sankalpa for priest signup since priest-specific gotra fields exist
+            const signupSankalpa = document.getElementById('signup-sankalpa');
+            if (signupSankalpa) signupSankalpa.style.display = 'none';
             document.getElementById('brahmin-yes-fields').style.display = 'none';
             document.getElementById('brahmin-no-fields').style.display = 'none';
             document.getElementById('submit-btn').disabled = true; // will be enabled once brahmin status selected

@@ -73,16 +73,16 @@
                     <div id="brahmin-yes-fields" style="display: none;">
                         <div class="form-group">
                             <label>Gotra</label>
-                            <input type="text" name="gotra_brahmin" class="form-control" placeholder="e.g. Kashyapa">
+                            <input type="text" name="gotra_brahmin" class="form-control" placeholder="e.g. Kashyapa" required>
                         </div>
                         <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                             <div class="form-group">
                                 <label>Sutra</label>
-                                <input type="text" name="sutra" class="form-control" placeholder="e.g. Bodhayana">
+                                <input type="text" name="sutra" class="form-control" placeholder="e.g. Bodhayana" required>
                             </div>
                             <div class="form-group">
                                 <label>Veda</label>
-                                <select name="veda" class="form-control">
+                                <select name="veda" class="form-control" required>
                                     <option value="">Select...</option>
                                     <option value="Rig Veda">Rig Veda</option>
                                     <option value="Yajur Veda">Yajur Veda</option>
@@ -110,8 +110,20 @@
                     </div>
 
                     <div id="priest-fields" style="display: none;">
-                        <label style="margin-bottom: 1rem; display: block; font-weight: 600;">Rituals you perform</label>
+                        <label style="margin-bottom: 1rem; display: block; font-weight: 600;">Select Poojas you perform</label>
+                        <div class="glass" style="padding: 0.75rem; margin-bottom: 0.75rem; display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem;">
+                            {% set poojas = [
+                                'Ayudha Pooja','Ayyappa Swamy Pooja','Bhagavathi Seva','Bhoomi Pooja','Chandi Parayanam (Saptashati)',
+                                'Ganapathi Pooja','Krishna Jayanthi Pooja (Janmashtami)','Lakshmi Pooja','Lalitha Sahasranama Pooja','New Business/Office Opening Pooja',
+                                'New Vehicle Pooja','Punyaha Vachanam','Rudrabhishekam','Samaradhanai Pooja','Saraswathi Pooja','Sathyanarayana Swamy Pooja',
+                                'Srimad Bhagavatam Parayanam','Sumangali Pooja','Vara Lakshmi Pooja','Vasakal Pooja (Nilai Vasal Pooja)','Veda Parayanam' ] %}
+                            {% for p in poojas %}
+                                <label style="display:flex; align-items:center; gap:0.5rem;"><input type="checkbox" name="poojas" value="{{ p }}"> <span style="font-size:0.95rem;">{{ p }}</span></label>
+                            {% endfor %}
+                        </div>
+                        <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">You may also enter short forms in the rituals table (e.g. "Ayyapa Pooja" will match "Ayyappa Swamy Pooja").</div>
                         <div class="glass" style="padding: 1rem; margin-bottom: 1rem;">
+                            <label style="display:block; margin-bottom:0.5rem; font-weight:600;">(Optional) Add custom rituals with fees</label>
                             <table style="width: 100%; border-collapse: collapse;" id="functions-table">
                                 <thead>
                                     <tr style="text-align: left; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">

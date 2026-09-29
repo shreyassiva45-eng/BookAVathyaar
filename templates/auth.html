@@ -184,7 +184,7 @@
                 </div>
 
                 <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;">
-                    <button type="submit" class="btn btn-primary" id="submit-btn" style="width: 100%;">Create Account</button>
+                    <button type="button" class="btn btn-primary" id="submit-btn" style="width: 100%" onclick="authFormSubmit()">Create Account</button>
                     <button type="button" class="btn btn-ghost" style="width: 100%;" onclick="resetForm()">Go Back</button>
                 </div>
             </form>
@@ -317,20 +317,47 @@
         btn.closest('tr').remove();
     }
 
-    // Capture form submission to serialize table
-    document.getElementById('auth-form').onsubmit = function(e) {
-        if (document.getElementById('form-role').value === 'priest' && document.getElementById('form-action').value === 'signup') {
-            const rows = document.querySelectorAll('#functions-body tr');
-            const data = [];
-            rows.forEach(row => {
-                const name = row.querySelector('.func-name').value;
-                const days = row.querySelector('.func-days').value;
-                const amount = row.querySelector('.func-amount').value;
-                if (name) data.push({ name, days, amount });
+    // Safe submit handler used by the submit button. Serializes custom rituals for priest signup, then submits.
+    function authFormSubmit() {
+        try {
+            const form = document.getElementById('auth-form');
+            if (!form) return;
+
+            const role = document.getElementById('form-role').value;
+            const action = document.getElementById('form-action').value;
+
+            if (role === 'priest' && action === 'signup') {
+                const rows = document.querySelectorAll('#functions-body tr');
+                const data = [];
+                rows.forEach(row => {
+                    const nameEl = row.querySelector('.func-name');
+                    const daysEl = row.querySelector('.func-days');
+                    const amountEl = row.querySelector('.func-amount');
+                    const name = nameEl ? nameEl.value.trim() : '';
+                    const days = daysEl ? daysEl.value : '';
+                    const amount = amountEl ? amountEl.value : '';
+                    if (name) data.push({ name, days, amount });
+                });
+                const hidden = document.getElementById('functions-json');
+                if (hidden) hidden.value = JSON.stringify(data);
+            }
+
+            // For normal signup/login, ensure sankalpa fields are not accidentally required
+            ['gotra_brahmin','sutra','veda'].forEach(n => {
+                const el = document.querySelector(`[name="${n}"]`);
+                if (el && el.getAttribute('required') === 'true' && document.getElementById('form-role').value !== 'priest') {
+                    el.removeAttribute('required');
+                }
             });
-            document.getElementById('functions-json').value = JSON.stringify(data);
+
+            // Submit the form programmatically
+            form.submit();
+        } catch (err) {
+            console.error('authFormSubmit error', err);
+            // Fallback: try native submit
+            try { document.getElementById('auth-form').submit(); } catch(e){}
         }
-    };
+    }
 
     function mockSocialLogin(provider) {
         alert('Mocking ' + provider + ' Sign In. In production, this will redirect to their OAuth portal.');

@@ -253,6 +253,71 @@ nav .logo:hover {
     gap: 2rem;
 }
 
+.guide-page {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.guide-heading {
+    margin-bottom: 2rem;
+}
+
+.guide-heading h1 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.guide-heading p,
+.guide-description {
+    color: var(--text-muted);
+}
+
+.guide-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    color: var(--text-main);
+    text-decoration: none;
+}
+
+.guide-card:hover {
+    border-color: var(--primary);
+}
+
+.guide-icon {
+    display: flex;
+    width: 64px;
+    height: 72px;
+    flex: 0 0 64px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(255, 153, 51, 0.15);
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.guide-card h2 {
+    margin-bottom: 0.35rem;
+    font-size: 1.2rem;
+}
+
+.guide-card-action {
+    margin-left: auto;
+    color: var(--primary);
+    white-space: nowrap;
+}
+
+.guide-viewer {
+    display: block;
+    width: 100%;
+    height: min(78vh, 1000px);
+    min-height: 480px;
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    background: #fff;
+}
+
 /* Priest Card Specifics */
 .priest-card {
     display: flex;
@@ -394,6 +459,9 @@ nav .logo:hover {
     }
     .hero h1 { font-size: 2.5rem; }
     .container { padding: 1.5rem; padding-bottom: 6rem; }
+    .guide-card { align-items: flex-start; }
+    .guide-card-action { display: none; }
+    .guide-viewer { min-height: 60vh; }
 }
 
 /* Modals & Overlays */

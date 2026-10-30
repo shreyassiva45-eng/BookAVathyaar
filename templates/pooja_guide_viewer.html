@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="guide-page fade-in">
+    <a class="btn btn-ghost" href="{{ url_for('pooja_guides') }}" style="margin-bottom: 1.5rem;">&larr; All Guides</a>
+    <div class="guide-heading">
+        <h1>Yajur Veda Yajnopaveetha Dharanam</h1>
+        <p>DIY Pooja guide · Can be used anytime</p>
+    </div>
+    <iframe
+        class="guide-viewer"
+        src="{{ url_for('static', filename='pdfs/yajur-veda-yajnopaveetha-dharanam.pdf') }}"
+        title="Yajur Veda Yajnopaveetha Dharanam PDF">
+    </iframe>
+    <p class="guide-description" style="margin-top: 1rem;">
+        If the PDF does not appear here,
+        <a href="{{ url_for('static', filename='pdfs/yajur-veda-yajnopaveetha-dharanam.pdf') }}" target="_blank" rel="noopener">open it directly</a>.
+    </p>
+</main>
+{% endblock %}

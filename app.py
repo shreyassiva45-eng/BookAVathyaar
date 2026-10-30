@@ -60,6 +60,14 @@ def index():
             return redirect(url_for('priest_dashboard'))
     return redirect(url_for('auth_portal'))
 
+@app.route('/pooja-guides')
+def pooja_guides():
+    return render_template('pooja_guides.html')
+
+@app.route('/pooja-guides/yajur-veda-yajnopaveetha-dharanam')
+def yajur_veda_guide():
+    return render_template('pooja_guide_viewer.html')
+
 @app.route('/auth', methods=['GET', 'POST'])
 def auth_portal():
     if request.method == 'POST':

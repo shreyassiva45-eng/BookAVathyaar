@@ -4,10 +4,11 @@
     <div class="hero-content">
         <h1>Find Your Spiritual Guide</h1>
         <p style="color: rgba(255,255,255,0.8); font-size: 1.1rem; margin-bottom: 2rem;">Connect with verified Purohits and Vaathyaars for all your rituals and ceremonies.</p>
-        <div style="display: flex; gap: 1rem; justify-content: center;">
+        <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
             <button class="btn btn-primary" onclick="findNearestPriests()" id="locate-btn">
                 <span id="locate-btn-text">📍 Find Priests Near Me</span>
             </button>
+            <a href="{{ url_for('pooja_guides') }}" class="btn btn-ghost">Pooja Vidhi Guides</a>
             {% if user_lat and user_lng %}
                 <a href="{{ url_for('normal_dashboard') }}" class="btn btn-ghost">Clear Filter</a>
             {% endif %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="guide-page fade-in">
+    <div class="guide-heading">
+        <h1>Pooja Vidhi Guides</h1>
+        <p>DIY Pooja PDFs you can use anytime.</p>
+    </div>
+
+    <div class="dashboard-grid">
+        <a class="card guide-card" href="{{ url_for('yajur_veda_guide') }}">
+            <span class="guide-icon" aria-hidden="true">PDF</span>
+            <span>
+                <h2>Yajur Veda Yajnopaveetha Dharanam</h2>
+                <span class="guide-description">A step-by-step guide for the sacred thread ceremony.</span>
+            </span>
+            <span class="guide-card-action">View PDF &rarr;</span>
+        </a>
+    </div>
+</main>
+{% endblock %}
